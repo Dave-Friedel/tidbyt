@@ -4,6 +4,7 @@ Summary: Shows today's date
 Description: A plain app to show today's date on the Tidbyt. No frills.
 Author: Friedel Solutions
 """
+# thanks
 
 load("render.star", "render")
 load("schema.star", "schema")
