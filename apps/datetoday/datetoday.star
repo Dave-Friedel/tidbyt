@@ -275,38 +275,35 @@ FONT = {
     ],
 }
 
-def pixel_char(char, scale, date_color):
+def pixel_char(char, scale, date_color, small = False):
     pattern = FONT[char]
     pixels = []
 
-    for row in pattern:
+    # Month glyphs are 8x10. Day glyphs are 10x14.
+    # Keep every bitmap cell, with symmetric integer pixel sizes.
+    column_widths = [2, 1, 2, 1, 2]
+    row_heights = [1, 2, 1, 2, 1, 2, 1]
+
+    for row_index in range(len(pattern)):
+        row = pattern[row_index]
         row_pixels = []
+        pixel_height = row_heights[row_index] if small else scale
 
         for i in range(len(row)):
-            pixel = row[i]
-
-            if pixel == "1":
-                color = date_color
-            else:
-                color = "#000000"
-
+            color = date_color if row[i] == "1" else "#000000"
+            pixel_width = column_widths[i] if small else scale
             row_pixels.append(
                 render.Box(
-                    width = scale,
-                    height = scale,
+                    width = pixel_width,
+                    height = pixel_height,
                     color = color,
                 ),
             )
 
-        pixels.append(
-            render.Row(
-                children = row_pixels,
-            ),
-        )
+        pixels.append(render.Row(children = row_pixels))
 
-    return render.Column(
-        children = pixels,
-    )
+    return render.Column(children = pixels)
+
 
 def main(config):
     # Get selected color. Default is white.
@@ -347,6 +344,7 @@ def main(config):
                     char,
                     scale,
                     date_color,
+                    small = not (char >= "0" and char <= "9"),
                 ),
             )
 
