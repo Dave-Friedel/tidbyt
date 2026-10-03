@@ -304,7 +304,6 @@ def pixel_char(char, scale, date_color, small = False):
 
     return render.Column(children = pixels)
 
-
 def main(config):
     # Get selected color. Default is white.
     date_color = config.get("date_color", "#FFFFFF")
